@@ -1,0 +1,7 @@
+# Training runs on Linux (or WSL2): the tflite-micro runtime ships Linux wheels only.
+tensorflow[and-cuda]==2.18.*
+tflite-micro>=0.dev20260101
+numpy>=1.26,<2.1
+scipy>=1.11
+soundfile>=0.12
+cryptography>=42

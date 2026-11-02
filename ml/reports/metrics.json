@@ -1,0 +1,47 @@
+{
+  "model_version": 1,
+  "tflite_bytes": 33848,
+  "labels": [
+    "_silence_",
+    "_unknown_",
+    "on",
+    "off"
+  ],
+  "test_clips": 2114,
+  "test_accuracy_int8": 0.9286,
+  "test_accuracy_float": 0.9286,
+  "confusion_matrix_rows_true_cols_pred": [
+    [
+      118,
+      1,
+      0,
+      0
+    ],
+    [
+      9,
+      1144,
+      25,
+      19
+    ],
+    [
+      2,
+      35,
+      335,
+      24
+    ],
+    [
+      0,
+      26,
+      10,
+      366
+    ]
+  ],
+  "input_quantization": {
+    "scale": 1.0,
+    "zero_point": 0
+  },
+  "false_accept_test": {
+    "stream_seconds": 1800,
+    "false_accepts_per_hour": 6.0
+  }
+}

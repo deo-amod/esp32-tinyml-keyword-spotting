@@ -1,0 +1,4 @@
+# Minimal set for host tests and model packaging checks (no TensorFlow).
+tflite-micro>=0.dev20260101
+numpy>=1.26,<2.1
+cryptography>=42
