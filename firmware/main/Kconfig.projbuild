@@ -1,0 +1,149 @@
+menu "Keyword spotting"
+
+    menu "Microphone (I2S)"
+        config KWS_I2S_PORT
+            int "I2S port"
+            range 0 1
+            default 0
+
+        config KWS_I2S_BCLK_GPIO
+            int "SCK / BCLK GPIO"
+            default 26
+
+        config KWS_I2S_WS_GPIO
+            int "WS / LRCLK GPIO"
+            default 25
+
+        config KWS_I2S_DIN_GPIO
+            int "SD / data-in GPIO"
+            default 33
+            help
+                Do not use GPIO16/17 on WROVER modules: they are wired to PSRAM.
+
+        config KWS_MIC_SLOT_LEFT
+            bool "Microphone on left slot (L/R pin to GND)"
+            default y
+            help
+                INMP441 with L/R tied to GND transmits in the left slot. If the
+                device only ever hears silence, try toggling this option.
+
+        config KWS_MIC_SHIFT
+            int "Right shift from 32-bit I2S word to 16-bit PCM"
+            range 8 20
+            default 14
+            help
+                16 keeps the top 16 bits (unity gain). Each step lower doubles the
+                gain. 14 (x4) suits an INMP441 at arm's length.
+
+        config KWS_MIC_DC_BLOCK
+            bool "Remove DC offset"
+            default y
+
+        config KWS_AUDIO_BUFFER_MS
+            int "Audio buffer between capture and inference (ms, PSRAM)"
+            range 200 4000
+            default 1000
+
+        config KWS_AUDIO_TASK_PRIORITY
+            int "Capture task priority"
+            default 12
+    endmenu
+
+    menu "Inference"
+        config KWS_INFERENCE_TASK_PRIORITY
+            int "Inference task priority"
+            default 10
+
+        config KWS_TENSOR_ARENA_KB
+            int "Tensor arena size (KB, internal RAM)"
+            range 16 160
+            default 48
+
+        config KWS_INFERENCE_EVERY_N_FRAMES
+            int "Run the model every N feature frames (20 ms each)"
+            range 1 10
+            default 3
+
+        config KWS_DETECTION_THRESHOLD_PCT
+            int "Detection threshold (% averaged probability)"
+            range 50 99
+            default 93
+            help
+                Default chosen with ml/tune_detector.py; see ml/reports/detector_sweep.json.
+                Can be changed at runtime with the set_threshold MQTT command.
+
+        config KWS_AVERAGE_WINDOW_MS
+            int "Averaging window (ms)"
+            default 800
+
+        config KWS_MIN_RESULTS
+            int "Minimum results in the window before deciding"
+            default 2
+
+        config KWS_SUPPRESSION_MS
+            int "Minimum time between detections (ms)"
+            default 1200
+
+        config KWS_MODEL_REQUIRE_SIGNATURE
+            bool "Require ECDSA signature on models in flash slots"
+            default y
+            help
+                Models delivered over the air must be signed with the key whose public
+                half is components/kws_model/keys/model_signing_pub.pem.
+    endmenu
+
+    menu "Board"
+        config KWS_BUTTON_GPIO
+            int "Button GPIO (active low)"
+            default 0
+
+        config KWS_FACTORY_RESET_HOLD_MS
+            int "Hold time to forget Wi-Fi and re-enter provisioning (ms)"
+            default 5000
+
+        config KWS_LED_GPIO
+            int "Status LED GPIO (-1 to disable)"
+            default 2
+
+        config KWS_LED_ACTIVE_HIGH
+            bool "LED is active high"
+            default y
+    endmenu
+
+    menu "Connectivity"
+        config KWS_PROV_DEV_USERNAME
+            string "BLE provisioning username (development fallback)"
+            default "kws"
+
+        config KWS_PROV_DEV_PASSWORD
+            string "BLE provisioning password (development fallback)"
+            default "kws-dev-pass"
+            help
+                Used only when the fctry partition has no per-device SRP6a verifier.
+                Leave empty for production so unprovisioned devices refuse to pair.
+
+        config KWS_MQTT_BROKER_URI
+            string "MQTT broker URI (development fallback)"
+            default ""
+            help
+                e.g. mqtts://192.168.1.10:8883. Factory data (broker_uri) takes precedence.
+
+        config KWS_ALLOW_INSECURE_MQTT
+            bool "Allow plain mqtt:// (development only)"
+            default n
+
+        config KWS_SNTP_SERVER
+            string "SNTP server"
+            default "pool.ntp.org"
+
+        config KWS_HEALTH_INTERVAL_S
+            int "Health telemetry interval (s)"
+            range 10 3600
+            default 60
+
+        config KWS_SELFTEST_CONNECT_TIMEOUT_S
+            int "After a firmware update, roll back if MQTT is not reached within (s)"
+            default 300
+    endmenu
+
+endmenu

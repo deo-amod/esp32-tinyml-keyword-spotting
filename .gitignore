@@ -1,0 +1,24 @@
+# ESP-IDF
+firmware/build*/
+firmware/managed_components/
+firmware/sdkconfig
+firmware/sdkconfig.old
+
+# Secrets: signing keys, CA material, per-device credentials. Never commit.
+secrets/
+*.key
+*_priv.pem
+
+# Python / ML
+__pycache__/
+*.pyc
+.venv/
+ml/work/
+ml/data/
+
+# Host tests
+tests/host/build/
+
+# Editors
+.vscode/
+.idea/

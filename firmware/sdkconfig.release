@@ -1,0 +1,27 @@
+# Release overlay. Build with:
+#   idf.py -B build-release -D SDKCONFIG=build-release/sdkconfig \
+#          -D SDKCONFIG_DEFAULTS="sdkconfig.defaults;sdkconfig.release" build
+#
+# WARNING: Secure Boot v2 and flash encryption in RELEASE mode permanently burn
+# eFuses on first boot. A device flashed with this configuration can only ever
+# run firmware signed with secrets/secure_boot_signing_key.pem. Read
+# docs/SECURITY.md before flashing a device with this build.
+
+CONFIG_SECURE_BOOT=y
+CONFIG_SECURE_BOOT_V2_ENABLED=y
+CONFIG_SECURE_BOOT_BUILD_SIGNED_BINARIES=y
+CONFIG_SECURE_BOOT_SIGNING_KEY="../secrets/secure_boot_signing_key.pem"
+CONFIG_ESP32_REV_MIN_3=y
+
+CONFIG_SECURE_FLASH_ENC_ENABLED=y
+CONFIG_SECURE_FLASH_ENCRYPTION_MODE_RELEASE=y
+CONFIG_NVS_ENCRYPTION=y
+
+CONFIG_SECURE_BOOT_ALLOW_JTAG=n
+CONFIG_ESP_CONSOLE_UART_DEFAULT=y
+CONFIG_BOOTLOADER_LOG_LEVEL_WARN=y
+CONFIG_LOG_DEFAULT_LEVEL_WARN=y
+
+# Release devices must use per-device credentials from the fctry partition.
+CONFIG_KWS_PROV_DEV_PASSWORD=""
+CONFIG_KWS_ALLOW_INSECURE_MQTT=n
