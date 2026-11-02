@@ -1,0 +1,10 @@
+# Each device (certificate CN = device id = %u) may only use its own topics.
+pattern write devices/%u/status
+pattern write devices/%u/events
+pattern write devices/%u/health
+pattern write devices/%u/cmd/result
+pattern read  devices/%u/cmd
+
+# Back-end / operator client (certificate CN "kws-backend"): full access.
+user kws-backend
+topic readwrite devices/#

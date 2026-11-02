@@ -1,0 +1,5 @@
+# Host tools: key generation, provisioning, broker certificates, operator CLI.
+cryptography>=42
+esp-idf-nvs-partition-gen>=0.1
+esptool>=4.7
+paho-mqtt>=2.0
